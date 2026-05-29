@@ -217,13 +217,22 @@ class ScrutinyWorkflowEngine:
         target_level = self._action_obj.target_level
 
         target_config = self._get_level_config(target_level)
-        target_status = (
-            target_config.allowed_actions.filter(
-                action_type=WORKFLOW_ACTION_TYPE_FORWARD, is_active=True
+
+        if not target_config:
+            raise ValidationError(
+                {"workflow": f"No config found for target level {target_level}."}
             )
-            .values_list("name", flat=True)
-            .first()
-        )
+
+        target_status = target_config.status_at_level
+        if not target_status:
+            raise ValidationError(
+                {
+                    "workflow": (
+                        f"Level {target_level} has no status_at_level configured. "
+                        f"Set it so send backs can restore the correct status."
+                    )
+                }
+            )
 
         self.instance.status = target_status
         self.instance.current_scrutiny_level = target_level

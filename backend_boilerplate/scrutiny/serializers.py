@@ -109,6 +109,7 @@ class ScrutinyWorkflowConfigurableSerializer(ActivitySerializer, NestedModelSeri
         fields = [
             "id",
             "scrutiny_level",
+            "status_at_level",
             "workflow_name",
             "workflow",
             "allowed_actions",
@@ -166,6 +167,7 @@ class ScrutinyWorkflowConfigurableListSerializer(serializers.ModelSerializer):
             "action_details",
             "actor_details",
             "notification_templates",
+            "status_at_level",
             "created_at",
             "updated_at",
         ]
