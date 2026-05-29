@@ -11,11 +11,15 @@ class BaseViewSet(ModelViewSet):
     permission_classes = (CustomPermissions,)
     filter_backends = (DjangoFilterBackend,)
 
+    def perform_update(self, serializer):
+        old_instance = self.get_object()
+        serializer.instance._old_instance = old_instance
+        super().perform_update(serializer)
+
     def update(self, request, *args, **kwargs):
         body = request.data
 
         instance = self.get_object()
-        old_instance = self.get_object()
 
         model_fields = [
             field.name
@@ -29,8 +33,6 @@ class BaseViewSet(ModelViewSet):
         response = super().update(request, *args, **kwargs)
 
         instance = self.get_object()
-
-        instance._old_instance = old_instance
 
         extra_fields = []
         if "author" in model_fields:
