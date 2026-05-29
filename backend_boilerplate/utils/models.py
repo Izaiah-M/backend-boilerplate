@@ -30,6 +30,8 @@ class BaseModel(models.Model):
     author = None
     supporting_documents = None
 
+    declaration = models.BooleanField(default=False)
+
     author = None
 
     class Meta:
