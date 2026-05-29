@@ -215,7 +215,7 @@ class ScrutinyWorkflowEngine:
 
     def _apply_send_back(self):
         target_level = self._action_obj.target_level
-
+        target_status = self._action_obj.status_at_target_level
         target_config = self._get_level_config(target_level)
 
         if not target_config:
@@ -223,13 +223,12 @@ class ScrutinyWorkflowEngine:
                 {"workflow": f"No config found for target level {target_level}."}
             )
 
-        target_status = target_config.status_at_level
         if not target_status:
             raise ValidationError(
                 {
-                    "workflow": (
-                        f"Level {target_level} has no status_at_level configured. "
-                        f"Set it so send backs can restore the correct status."
+                    "action": (
+                        f"Action '{self.action_name}' has no status_at_target_level configured. "
+                        f"Set it so the submission gets the correct status on send back."
                     )
                 }
             )

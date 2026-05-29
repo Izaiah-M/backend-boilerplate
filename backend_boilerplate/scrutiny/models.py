@@ -58,6 +58,14 @@ class AbstractWorkflowAction(WorkflowAbstractModel):
         blank=True,
         help_text=("Set this for all actions except rejected/approved/deferred"),
     )
+    status_at_target_level = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True,
+        help_text=(
+            "Status to set for Backward actions. Defines what the status name should be when the action is a send back to said level."
+        ),
+    )
     is_active = models.BooleanField(default=True)
 
     class Meta:
@@ -76,16 +84,6 @@ class AbstractWorkflowAction(WorkflowAbstractModel):
 class AbstractScrutinyWorkflowConfigurable(WorkflowAbstractModel):
     scrutiny_level = models.IntegerField(default=1)
     level_description = models.CharField(max_length=100, blank=True, null=True)
-
-    status_at_level = models.CharField(
-        max_length=100,
-        null=True,
-        blank=True,
-        help_text=(
-            "The status a submission should have when sitting at this level. "
-            "Used to restore status on send back."
-        ),
-    )
 
     is_active = models.BooleanField(default=True)
     workflow = models.ForeignKey(

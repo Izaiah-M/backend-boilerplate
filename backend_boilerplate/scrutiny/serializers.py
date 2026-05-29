@@ -48,6 +48,7 @@ class WorkflowActionSerializer(ActivitySerializer):
             "created_by",
             "action_type",
             "target_level",
+            "status_at_target_level",
             "workflow_name",
             "workflow",
         ]
@@ -56,7 +57,14 @@ class WorkflowActionSerializer(ActivitySerializer):
 class SimplifiedWorkflowActionSerializer(serializers.ModelSerializer):
     workflow_name = serializers.CharField(source="workflow.name", read_only=True)
     class Meta:
-        fields = ["id", "name", "action_type", "label", "workflow_name"]
+        fields = [
+            "id",
+            "name",
+            "action_type",
+            "label",
+            "workflow_name",
+            "status_at_target_level",
+        ]
 
 
 class WorkflowActionListSerializer(serializers.ModelSerializer):
@@ -67,6 +75,7 @@ class WorkflowActionListSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "label",
+            "status_at_target_level",
             "is_active",
             "action_type",
             "target_level",
@@ -109,7 +118,6 @@ class ScrutinyWorkflowConfigurableSerializer(ActivitySerializer, NestedModelSeri
         fields = [
             "id",
             "scrutiny_level",
-            "status_at_level",
             "workflow_name",
             "workflow",
             "allowed_actions",
@@ -167,7 +175,6 @@ class ScrutinyWorkflowConfigurableListSerializer(serializers.ModelSerializer):
             "action_details",
             "actor_details",
             "notification_templates",
-            "status_at_level",
             "created_at",
             "updated_at",
         ]
