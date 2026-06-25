@@ -69,7 +69,7 @@ class AbstractWorkflowAction(WorkflowAbstractModel):
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = ("workflow", "name")
+        unique_together = ("workflow", "name", "target_level")
         abstract = True
 
     def __str__(self):
