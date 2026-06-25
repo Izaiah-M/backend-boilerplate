@@ -109,14 +109,18 @@ class ScrutinyWorkflowEngine:
             )
 
     def _resolve_action(self):
-        self._action_obj = self.workflow_action_model.objects.filter(
-            name=self.action_name, is_active=True, workflow=self._workflow
+        self._action_obj = self._level_config.allowed_actions.filter(
+            name=self.action_name, is_active=True
         ).first()
 
         if not self._action_obj:
             raise ValidationError(
                 {
-                    "action": f"Action '{self.action_name}' does not exist or is inactive."
+                    "action": (
+                        f"Action '{self.action_name}' does not exist, is inactive, "
+                        f"or is not permitted at level {self._current_level} of "
+                        f"'{self.workflow_name}'."
+                    )
                 }
             )
 
