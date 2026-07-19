@@ -12,14 +12,15 @@ class BaseViewSet(ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
 
     def perform_update(self, serializer):
-        old_instance = self.get_object()
-        serializer.instance._old_instance = old_instance
+        serializer.instance._old_instance = self._old_instance_snapshot
         super().perform_update(serializer)
 
     def update(self, request, *args, **kwargs):
         body = request.data
 
-        instance = self.get_object()
+        self._old_instance_snapshot = self.get_object()
+
+        instance = self._old_instance_snapshot
 
         model_fields = [
             field.name
@@ -33,6 +34,7 @@ class BaseViewSet(ModelViewSet):
         response = super().update(request, *args, **kwargs)
 
         instance = self.get_object()
+        instance._old_instance = self._old_instance_snapshot
 
         extra_fields = []
         if "author" in model_fields:
